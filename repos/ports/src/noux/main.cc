@@ -235,7 +235,7 @@ struct Noux::Main
 
 	} _io_response_handler;
 
-	struct Vfs_env : Vfs::Env
+	struct Vfs_env : Vfs::Env, Vfs::Watch_response_handler
 	{
 		Main &_main;
 
@@ -246,13 +246,18 @@ struct Noux::Main
 		: _main(main), _root_dir(*this, config, _fs_factory) { }
 
 		/**
+		 * Vfs::Watch_response_handler interface
+		 */
+		void handle_watch_response(Vfs::Vfs_watch_handle::Context*) override { }
+
+		/**
 		 * Vfs::Env interface
 		 */
 		Genode::Env                 &env()           override { return _main._env; }
 		Allocator                   &alloc()         override { return _main._heap; }
 		Vfs::File_system            &root_dir()      override { return _root_dir; }
 		Vfs::Io_response_handler    &io_handler()    override { return _main._io_response_handler; }
-		Vfs::Watch_response_handler &watch_handler() override { }
+		Vfs::Watch_response_handler &watch_handler() override { return *this; }
 
 	} _vfs_env { *this, _config.xml().sub_node("fstab") };
 
