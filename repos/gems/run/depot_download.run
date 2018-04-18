@@ -1,7 +1,10 @@
 create_boot_directory
 
 # the test currently is tied to the x86-only iPXE NIC driver
-assert_spec x86
+if {![have_spec x86] || [have_spec linux]} {
+	puts "Run script does not support this platform."
+	exit 0
+}
 
 import_from_depot genodelabs/src/[base_src] \
                   genodelabs/src/report_rom \
@@ -127,5 +130,5 @@ build_boot_image $boot_modules
 
 append qemu_args " -nographic -net nic,model=e1000 -net user "
 
-run_genode_until {.*\[init -> depot_download -> manager\] installation complete.*\n} 60
+run_genode_until {.*\[init -> depot_download -> manager\] installation complete.*\n} 120
 
