@@ -56,7 +56,7 @@ append config {
 	</start>
 	<start name="nic_drv" caps="120">
 		<binary name="} [nic_drv_binary] {"/>
-		<resource name="RAM" quantum="12M"/>
+		<resource name="RAM" quantum="16M"/>
 		<provides> <service name="Nic"/> </provides>
 		} [nic_drv_config] {
 	</start>
